@@ -81,6 +81,16 @@ func (c *Client) SendWithContext(ctx context.Context, msg *Message) (*Response, 
 // Send sends a message to the FCM server without retrying in case of service
 // unavailability. A non-nil error is returned if a non-recoverable error
 // occurs (i.e. if the response status is not "200 OK").
+func (c *Client) SendPayload(data *[]byte) (*Response, error) {
+  ctx, cancel := context.WithTimeout(context.Background(), c.timeout)
+  defer cancel()
+
+  return c.send(ctx, *data)
+}
+
+// Send sends a message to the FCM server without retrying in case of service
+// unavailability. A non-nil error is returned if a non-recoverable error
+// occurs (i.e. if the response status is not "200 OK").
 func (c *Client) Send(msg *Message) (*Response, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.timeout)
 	defer cancel()
